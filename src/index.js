@@ -4,8 +4,8 @@ const app = express();
 const port = 5173;
 
 app.get('/', function(req, res) {
-	lookupDB();
-	res.send(`Hello World!\n`);
+	const result = lookupDB();
+	res.send(`${result}`);
 });
 
 app.use(express.static('public'));
