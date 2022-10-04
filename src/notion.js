@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export function retrieveDatabase() {
+export default async function lookupDB() {
 	const options = {
 		method: 'POST',
 		headers: {
@@ -16,8 +16,7 @@ export function retrieveDatabase() {
 		})
 	};
 
-	fetch(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`, options)
-	.then(response => response.json())
-	.then(response => console.log(response))
-	.catch(err => console.log(err));
+	const response = await fetch(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`, options);
+	const result = await response.json();
+	console.log(result);
 }
