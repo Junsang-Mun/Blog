@@ -1,11 +1,16 @@
 import express from 'express';
-import { retrieveDatabase } from './notion.js';
+import { lookupDB, queryPage } from './notion.js';
 const app = express();
 const port = 5173;
 
-app.get('/', function(req, res) {
-	retrieveDatabase();
-	res.send(`Hello World!\n`);
+app.get('/', async(req, res) => {
+	const result = await lookupDB();
+	const block = await queryPage('0c48ff77955a438db0def51ef4767675');
+	const postTitles = result.results.map((post) => (
+		post.properties.title.title[0].plain_text
+	));
+	console.log(`post titles: ${postTitles}\nblock: ${block}`);
+	res.send(postTitles);
 });
 
 app.use(express.static('public'));
