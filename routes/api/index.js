@@ -1,4 +1,5 @@
 import express from 'express';
+import { lookupDB, queryPage, queryPageByTag } from '../../src/notion.js';
 const router = express.Router();
 export { router as apiRouter }
 
