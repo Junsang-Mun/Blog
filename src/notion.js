@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export async function lookupDB() {
+	const url = `https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`;
 	const options = {
 		method: 'POST',
 		headers: {
@@ -16,7 +17,33 @@ export async function lookupDB() {
 		})
 	};
 
-	const response = await fetch(`https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`, options);
-	const result = await response.json();
-	return result;
+	const response = await fetch(url, options);
+	if (response.status === 200) {
+		const data = await response.json();
+		return data;
+	}
+	else {
+		console.error(`Notion API Error: Status code ${response.status} @ lookupDB`);
+	}
+}
+
+export async function queryPage(id) {
+	const url = `https://api.notion.com/v1/blocks/${id}/children?page_size=100`;
+	const options = {
+		method: 'GET',
+		headers: {
+			accept: 'application/json',
+			'Notion-Version': '2022-06-28',
+			authorization: `Bearer ${process.env.NOTION_TOKEN}`
+		}
+	};
+
+	const response = await fetch(url, options);
+	if (response.status === 200) {
+		const data = await response.json();
+		return data;
+	}
+	else {
+		console.error(`Notion API Error: Status code ${response.status} @ queryPage`);
+	}
 }
