@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { postPreview } from './cleanup.js';
 dotenv.config();
 
-export async function lookupDB() {
+export async function previewPost() {
 	const url = `https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`;
 	const options = {
 		method: 'POST',
