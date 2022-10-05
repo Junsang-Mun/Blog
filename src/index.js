@@ -1,4 +1,5 @@
 import express from 'express';
+import { apiRouter } from '../routes/api/index.js';
 import { lookupDB, queryPage } from './notion.js';
 const app = express();
 const port = 5173;
@@ -12,6 +13,8 @@ app.get('/', async(req, res) => {
 	console.log(`post titles: ${postTitles}\nblock: ${block}`);
 	res.send(postTitles);
 });
+
+app.use("/api", apiRouter);
 
 app.use(express.static('public'));
 
