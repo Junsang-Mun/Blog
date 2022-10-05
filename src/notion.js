@@ -21,9 +21,38 @@ export async function lookupDB() {
 	if (response.status === 200) {
 		const data = await response.json();
 		return data;
-	}
-	else {
+	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ lookupDB`);
+	}
+}
+
+export async function queryPageByTag(tag) {
+	const url = `https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`;
+	const options = {
+		method: 'POST',
+		headers: {
+			accept: 'application/json',
+			'content-type': 'application/json',
+			'Notion-Version': '2022-06-28',
+			authorization: `Bearer ${process.env.NOTION_TOKEN}`
+		},
+		body: JSON.stringify({
+			page_size: 100,
+			filter: {
+				"property": "tags",
+				"multi_select": {
+					"contains": tag
+				}
+			}
+		})
+	};
+
+	const response = await fetch(url, options);
+	if (response.status === 200) {
+		const data = await response.json();
+		return data;
+	} else {
+		console.error(`Notion API Error: Status code ${response.status} @ queryPageByTag`);
 	}
 }
 
@@ -42,8 +71,7 @@ export async function queryPage(id) {
 	if (response.status === 200) {
 		const data = await response.json();
 		return data;
-	}
-	else {
+	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ queryPage`);
 	}
 }
