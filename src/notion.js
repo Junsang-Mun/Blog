@@ -18,7 +18,7 @@ export async function lookupDB() {
 			filter: {
 				"property": "published",
 				"select": {
-					"equals": "Yes"
+					"equals": "YES"
 				}
 			}
 		})
