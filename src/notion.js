@@ -27,7 +27,7 @@ export async function lookupDB() {
 	const response = await fetch(url, options);
 	if (response.status === 200) {
 		const json = await response.json();
-		const data = postPreview(json.results);
+		const data = postPreview(json);
 		return data;
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ lookupDB`);

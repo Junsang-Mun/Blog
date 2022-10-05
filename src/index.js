@@ -5,10 +5,10 @@ const app = express();
 const port = 5173;
 
 app.get('/', async(req, res) => {
-	let result = await lookupDB();
+	let posts = await lookupDB();
 	//const block = await queryPage('0c48ff77955a438db0def51ef4767675');
-	console.log(result);
-	res.send(`${result[0].id}`);
+	console.log(posts);
+	res.send(`${posts.posts[0].title}`);
 });
 
 app.use("/api", apiRouter);
