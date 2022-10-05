@@ -1,17 +1,19 @@
 import express from 'express';
+import { apiRouter } from '../routes/api/index.js';
 import { lookupDB, queryPage } from './notion.js';
+import { postPreview } from './cleanup.js';
 const app = express();
 const port = 5173;
 
 app.get('/', async(req, res) => {
-	const result = await lookupDB();
-	const block = await queryPage('0c48ff77955a438db0def51ef4767675');
-	const postTitles = result.results.map((post) => (
-		post.properties.title.title[0].plain_text
-	));
-	console.log(`post titles: ${postTitles}\nblock: ${block}`);
-	res.send(postTitles);
+	let result = await lookupDB();
+	//const block = await queryPage('0c48ff77955a438db0def51ef4767675');
+	result = postPreview(result.results);
+	console.log(result);
+	res.send(`${result[0].id}`);
 });
+
+app.use("/api", apiRouter);
 
 app.use(express.static('public'));
 
