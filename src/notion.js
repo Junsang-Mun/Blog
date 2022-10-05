@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import { postPreview } from './cleanup.js';
 dotenv.config();
 
 export async function lookupDB() {
@@ -19,7 +20,8 @@ export async function lookupDB() {
 
 	const response = await fetch(url, options);
 	if (response.status === 200) {
-		const data = await response.json();
+		const json = await response.json();
+		const data = postPreview(json.results);
 		return data;
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ lookupDB`);
