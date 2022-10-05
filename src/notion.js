@@ -14,7 +14,13 @@ export async function lookupDB() {
 			authorization: `Bearer ${process.env.NOTION_TOKEN}`
 		},
 		body: JSON.stringify({
-			page_size: 100
+			page_size: 100,
+			filter: {
+				"property": "published",
+				"select": {
+					"equals": "Yes"
+				}
+			}
 		})
 	};
 
