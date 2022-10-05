@@ -5,12 +5,11 @@ const port = 5173;
 
 app.get('/', async(req, res) => {
 	const result = await lookupDB();
-	res.send(`${result.results[0].properties}`);
-
-	const postIDs = result.results.map((post) => (
+	const postTitles = result.results.map((post) => (
 		post.properties.title.title[0].plain_text
-	));
-	console.log(`postIDs: ${postIDs}`);
+		));
+	console.log(`post titles: ${postTitles}`);
+	res.send(postTitles);
 });
 
 app.use(express.static('public'));
