@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import { postPreview } from './cleanup.js';
+import { postPreview, postView } from './cleanup.js';
 dotenv.config();
 
 export async function previewPost() {
@@ -77,7 +77,8 @@ export async function queryPageById(id) {
 
 	const response = await fetch(url, options);
 	if (response.status === 200) {
-		const data = await response.json();
+		const json = await response.json();
+		const data = postView(json);
 		return data;
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ queryPageById`);

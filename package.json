@@ -6,7 +6,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pm2 start src/index.js",
+    "pm2": "pm2 start src/index.js --watch",
+	"quit": "pkill -f node && pm2 kill",
     "node": "node src/index.js"
   },
   "author": "",

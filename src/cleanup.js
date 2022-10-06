@@ -17,6 +17,18 @@ export function postPreview(data) {
 }
 
 export function postView(data) {
-	let modified = data.map(({id}) => ({id}));
-	return modified;
+	let result = {
+		"post": [],
+		"next_cursor": data.next_cursor,
+		"has_more": data.has_more
+	}
+	for (let i in data.results) {
+		const item = data.results[i];
+		const type = item.type;
+		result.post.push({
+			"type": item.type,
+			"data": item[(type)].rich_text[0]
+		});
+	}
+	return result;
 }
