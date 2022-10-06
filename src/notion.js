@@ -64,7 +64,7 @@ export async function queryPageByTag(tag) {
 	}
 }
 
-export async function queryPage(id) {
+export async function queryPageById(id) {
 	const url = `https://api.notion.com/v1/blocks/${id}/children?page_size=100`;
 	const options = {
 		method: 'GET',
@@ -80,6 +80,6 @@ export async function queryPage(id) {
 		const data = await response.json();
 		return data;
 	} else {
-		console.error(`Notion API Error: Status code ${response.status} @ queryPage`);
+		console.error(`Notion API Error: Status code ${response.status} @ queryPageById`);
 	}
 }

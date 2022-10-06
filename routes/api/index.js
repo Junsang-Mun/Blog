@@ -1,15 +1,18 @@
 import express from 'express';
-import { previewPost, queryPage, queryPageByTag } from '../../src/notion.js';
+import { previewPost, queryPageById, queryPageByTag } from '../../src/notion.js';
 const router = express.Router();
 export { router as apiRouter }
 
-router.get('/post', function(req, res, next) {
-	res.send('accessed to /api/post');
+router.get('/post', async function(req, res, next) {
+	const data = await previewPost();
+	res.status(200);
+	res.send(data);
 });
 
-router.get('/post/:id', function(req, res, next) {
-	res.send('accessed to /api/post/id');
-	console.log(req.params.id);
+router.get('/post/:id', async function(req, res, next) {
+	const data = await queryPageById(req.params.id);
+	res.status(200)
+	res.send(data);
 });
 
 router.get('/tag', function(req, res, next) {

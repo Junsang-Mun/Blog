@@ -1,6 +1,6 @@
 import express from 'express';
 import { apiRouter } from '../routes/api/index.js';
-import { previewPost, queryPage } from './notion.js';
+import { previewPost, queryPageById } from './notion.js';
 const app = express();
 const port = 5173;
 
