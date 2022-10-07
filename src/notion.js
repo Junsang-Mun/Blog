@@ -20,7 +20,13 @@ export async function previewPost() {
 				"select": {
 					"equals": "YES"
 				}
-			}
+			},
+			sorts: [
+					{
+						"timestamp": "created_time",
+						"direction": "ascending"
+					}
+				]
 		})
 	};
 
@@ -31,6 +37,9 @@ export async function previewPost() {
 		return data;
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ lookupDB`);
+		return {
+			"error": `${response.status}`
+		}
 	}
 }
 
@@ -83,9 +92,7 @@ export async function queryPageById(id) {
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ queryPageById`);
 		return {
-			"body": `${response.status}`,
-			"next_cursor": null,
-			"has_more": null
+			"error": `${response.status}`,
 		}
 	}
 }

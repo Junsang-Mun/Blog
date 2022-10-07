@@ -5,14 +5,24 @@ export { router as apiRouter }
 
 router.get('/post', async function(req, res, next) {
 	const data = await previewPost();
-	res.status(200);
-	res.send(data);
+	if (data.error) {
+		res.status(404);
+		res.send(data.error);
+	} else {
+		res.status(200);
+		res.send(data);
+	}
 });
 
 router.get('/post/:id', async function(req, res, next) {
 	const data = await queryPageById(req.params.id);
-	res.status(200)
-	res.send(data);
+	if (data.error) {
+		res.status(404);
+		res.send(data.error);
+	} else {
+		res.status(200);
+		res.send(data);
+	}
 });
 
 router.get('/tag', function(req, res, next) {
