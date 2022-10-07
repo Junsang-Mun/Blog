@@ -16,6 +16,15 @@ export function postPreview(data) {
 	return result;
 }
 
+export function postMetadata(data) {
+	let result = {};
+
+	result.icon = data.icon;
+	result.tag = data.properties.tag.select.name;
+	result.title = data.properties.title.title[0].plain_text;
+	return result;
+}
+
 export function postView(data) {
 	let bodyData = '';
 	for (let i in data.results) {

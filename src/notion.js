@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
-import { postPreview, postView } from './cleanup.js';
+import { postMetadata, postPreview, postView } from './cleanup.js';
 dotenv.config();
 
 export async function previewPost() {
@@ -83,7 +83,7 @@ export async function queryPageById(id) {
 			authorization: `Bearer ${process.env.NOTION_TOKEN}`
 		}
 	};
-
+	
 	const response = await fetch(url, options);
 	if (response.status === 200) {
 		const json = await response.json();
@@ -94,5 +94,24 @@ export async function queryPageById(id) {
 		return {
 			"error": `${response.status}`,
 		}
+	}
+}
+
+export async function queryPageMetadata(id) {
+	const url = `https://api.notion.com/v1/pages/${id}`;
+	const options = {
+		method: 'GET',
+		headers: {
+			accept: 'application/json',
+			'Notion-Version': '2022-06-28',
+			authorization: `Bearer ${process.env.NOTION_TOKEN}`
+		}
+	}
+
+	const response = await fetch(url, options);
+	if (response.status === 200) {
+		const json = await response.json();
+		const data = postMetadata(json);
+		return data;
 	}
 }
