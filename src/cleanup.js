@@ -17,18 +17,41 @@ export function postPreview(data) {
 }
 
 export function postView(data) {
+	let bodyData = '';
+	for (let i in data.results) {
+		const body = data.results[i];
+		const type = body.type;
+		if (body[(type)].rich_text) {
+			switch(type) {
+				case 'heading_1':
+					bodyData += `<h1>${body[(type)].rich_text[0].plain_text}</h1>`;
+					break;
+				case 'heading_2':
+					bodyData += `<h2>${body[(type)].rich_text[0].plain_text}</h2>`;
+					break;
+				case 'heading_3':
+					bodyData += `<h3>${body[(type)].rich_text[0].plain_text}</h3>`;
+					break;
+				case 'paragraph':
+					if (body[(type)].rich_text[0] !== undefined) {
+						bodyData += `<p>${body[(type)].rich_text[0].plain_text}</p>`;
+						break;
+					} else {
+						bodyData += "<br>";
+						break;
+					}
+				case 'bulleted_list_item':
+					bodyData += `<p>　⁍ ${body[(type)].rich_text[0].plain_text}</p>`;
+					break;
+			}
+		} else if (type === "divider") {
+			bodyData += "<hr />"
+		}
+	}
 	let result = {
-		"post": [],
+		"body": bodyData,
 		"next_cursor": data.next_cursor,
 		"has_more": data.has_more
-	}
-	for (let i in data.results) {
-		const item = data.results[i];
-		const type = item.type;
-		result.post.push({
-			"type": item.type,
-			"data": item[(type)].rich_text[0]
-		});
 	}
 	return result;
 }

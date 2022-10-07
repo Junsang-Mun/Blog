@@ -82,5 +82,10 @@ export async function queryPageById(id) {
 		return data;
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ queryPageById`);
+		return {
+			"body": `${response.status}`,
+			"next_cursor": null,
+			"has_more": null
+		}
 	}
 }
