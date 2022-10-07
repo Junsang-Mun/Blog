@@ -1,8 +1,9 @@
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import { postPreview, postView } from './cleanup.js';
 dotenv.config();
 
-export async function lookupDB() {
+export async function previewPost() {
 	const url = `https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`;
 	const options = {
 		method: 'POST',
@@ -13,13 +14,20 @@ export async function lookupDB() {
 			authorization: `Bearer ${process.env.NOTION_TOKEN}`
 		},
 		body: JSON.stringify({
-			page_size: 100
+			page_size: 100,
+			filter: {
+				"property": "published",
+				"select": {
+					"equals": "YES"
+				}
+			}
 		})
 	};
 
 	const response = await fetch(url, options);
 	if (response.status === 200) {
-		const data = await response.json();
+		const json = await response.json();
+		const data = postPreview(json);
 		return data;
 	} else {
 		console.error(`Notion API Error: Status code ${response.status} @ lookupDB`);
@@ -56,7 +64,7 @@ export async function queryPageByTag(tag) {
 	}
 }
 
-export async function queryPage(id) {
+export async function queryPageById(id) {
 	const url = `https://api.notion.com/v1/blocks/${id}/children?page_size=100`;
 	const options = {
 		method: 'GET',
@@ -69,9 +77,15 @@ export async function queryPage(id) {
 
 	const response = await fetch(url, options);
 	if (response.status === 200) {
-		const data = await response.json();
+		const json = await response.json();
+		const data = postView(json);
 		return data;
 	} else {
-		console.error(`Notion API Error: Status code ${response.status} @ queryPage`);
+		console.error(`Notion API Error: Status code ${response.status} @ queryPageById`);
+		return {
+			"body": `${response.status}`,
+			"next_cursor": null,
+			"has_more": null
+		}
 	}
 }
