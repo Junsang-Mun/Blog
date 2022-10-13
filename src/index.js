@@ -1,8 +1,11 @@
 import express from 'express';
 import { apiRouter } from '../routes/api/index.js';
 import { previewPost, queryPageById, queryPageMetadata } from './notion.js';
+import cors from 'cors';
 const app = express();
-const port = 5173;
+const port = 3030;
+
+app.use(cors());
 
 app.get('/', async(req, res) => {
 	res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
