@@ -6,11 +6,32 @@ export function postPreview(data) {
 	}
 	for(let i in data.results) {
 		let item = data.results[i];
+		let id, title, tag, preview;
+		if (item.id) {
+			id = item.id;
+		} else {
+			id = '';
+		}
+		if (item.properties.title) {
+			title = item.properties.title.title[0].plain_text;
+		} else {
+			title = '';
+		}
+		if (item.properties.tag.select) {
+			tag = item.properties.tag.select.name;
+		} else {
+			tag = 'no tag';
+		}
+		if (item.properties.preview.rich_text[0]) {
+			preview = item.properties.preview.rich_text[0].plain_text;
+		} else {
+			preview = '';
+		}
 		result.posts.push({
-			"id": item.id,
-			"title": item.properties.title.title[0].plain_text,
-			"tag": item.properties.tag.select.name,
-			"preview": item.properties.preview.rich_text[0].plain_text
+			"id": id,
+			"title": title,
+			"tag": tag,
+			"preview": preview
 		});
 	}
 	return result;
@@ -19,9 +40,15 @@ export function postPreview(data) {
 export function postMetadata(data) {
 	let result = {};
 
-	result.icon = data.icon;
-	result.tag = data.properties.tag.select.name;
-	result.title = data.properties.title.title[0].plain_text;
+	if (data.icon) {
+		result.icon = data.icon;
+	}
+	if (data.properties.tag.select) {
+		result.tag = data.properties.tag.select.name;
+	}
+	if (data.properties.title.title[0]) {
+		result.title = data.properties.title.title[0].plain_text;
+	}
 	return result;
 }
 
